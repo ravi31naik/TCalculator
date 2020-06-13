@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalkingCalculator.Android",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalkingCalculator.iOS", "TalkingCalculator\TalkingCalculator.iOS\TalkingCalculator.iOS.csproj", "{79060779-23FE-48D8-ACFD-943E31ACCB37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalkingCalculator", "TalkingCalculator\TalkingCalculator\TalkingCalculator.csproj", "{9DF7AFBD-2A5A-4A39-8A92-39B81ACA4DE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TalkingCalculator", "TalkingCalculator\TalkingCalculator\TalkingCalculator.csproj", "{9DF7AFBD-2A5A-4A39-8A92-39B81ACA4DE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
