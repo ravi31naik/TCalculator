@@ -18,6 +18,7 @@
         private string totalString = string.Empty;
         private string leftString = string.Empty;
         private string rightString = string.Empty;
+        private string oprString = string.Empty;
 
 
         public static readonly string ErrorResult = "ERROR";
@@ -126,6 +127,7 @@
                         tempResult = double.NaN;
                         isDecimalValue = false;
                         leftString = ConvertDigitToString(leftNumber);
+                        ClearRightNumber();
                         return ConvertDigitToString(leftNumber);
                     }
                     else
@@ -200,23 +202,42 @@
                 }
                 totalString = ConvertDigitToString(leftNumber);
                 tempResult = leftNumber;
+                oprString = calculateOperation;
                 return totalString;
             }
             return ErrorResult;
         }
         public string GetCalculation()
         {
-            if (string.IsNullOrEmpty(totalString))
+            if (string.IsNullOrEmpty(oprString))
             {
-                return leftString + " " + calculateOperation.ToString() + " " + rightString;
+                if (string.IsNullOrEmpty(totalString))
+                {
+                    return leftString + " " + calculateOperation.ToString() + " " + rightString;
+                }
+                else
+                {
+                    string r = leftString + " " + calculateOperation.ToString() + " " + rightString + " = " + totalString;
+                    leftString = totalString;
+                    rightString = totalString = string.Empty;
+                    return r;
+                }
             }
             else
             {
-                string r = leftString + " " + calculateOperation.ToString() + " " + rightString + " = " + totalString;
-                leftString = totalString;
-                rightString = totalString = string.Empty;
-                return r;
+                if (string.IsNullOrEmpty(totalString))
+                {
+                    return leftString + " " + oprString + " " + rightString;
+                }
+                else
+                {
+                    string r = leftString + " " + oprString + " " + rightString + " = " + totalString;
+                    leftString = totalString;
+                    oprString = rightString = totalString = string.Empty;
+                    return r;
+                }
             }
+
         }
         public void ClearAllData()
         {
