@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
+    using TalkingCalculator.Model;
     using Xamarin.Essentials;
     using Xamarin.Forms;
 
@@ -20,6 +21,8 @@
             _displayLabel = this.FindByName<Label>("DisplayWindow");
             mainViewModel = BindingContext as MainPageViewModel;
             mainViewModel.ClearAll();
+            CalculatorV2 v2 = new CalculatorV2();
+            v2.Test();
         }
 
         private void ButtonNumber_Clicked(object sender, EventArgs e)

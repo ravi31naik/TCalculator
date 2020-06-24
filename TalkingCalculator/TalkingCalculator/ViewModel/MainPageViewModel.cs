@@ -3,11 +3,13 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
+    using TalkingCalculator.Model;
     using Xamarin.Essentials;
 
     public class MainPageViewModel : INotifyPropertyChanged
     {
         Calculator calc = new Calculator();
+        CalculatorV2 calcV2 = new CalculatorV2();
         TextToSpeechCalc tts = new TextToSpeechCalc();
         string number = string.Empty;
         string operatorEntered = string.Empty;
@@ -29,6 +31,7 @@
             {
                 number = value;
                 calc.UpdateNumber(number);
+                //calcV2.UpdateNumber(number);
                 _displayScreen = calc.GetNumber();
                 onPropertyChanged(nameof(DisplayNumber));
                 _displayCalculation = calc.GetCalculation();
@@ -44,6 +47,7 @@
             {
                 operatorEntered = value;
                 _displayScreen = calc.UpdateOperator(operatorEntered);
+                //calcV2.UpdateOperator(operatorEntered);
                 onPropertyChanged(nameof(DisplayNumber));
                 _displayCalculation = calc.GetCalculation();
                 onPropertyChanged(nameof(DisplayCalculation));
