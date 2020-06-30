@@ -30,12 +30,17 @@
             set
             {
                 number = value;
-                calc.UpdateNumber(number);
-                //calcV2.UpdateNumber(number);
-                _displayScreen = calc.GetNumber();
+                //calc.UpdateNumber(number);
+                //_displayScreen = calc.GetNumber();
+                //onPropertyChanged(nameof(DisplayNumber));
+                //_displayCalculation = calc.GetCalculation();
+                //onPropertyChanged(nameof(DisplayCalculation));
+                calcV2.UpdateNumber(number);
+                _displayScreen = calcV2.GetCalculationResult();
                 onPropertyChanged(nameof(DisplayNumber));
-                _displayCalculation = calc.GetCalculation();
+                _displayCalculation = calcV2.GetEquation();
                 onPropertyChanged(nameof(DisplayCalculation));
+
             }
         }
 
@@ -46,10 +51,15 @@
             set
             {
                 operatorEntered = value;
-                _displayScreen = calc.UpdateOperator(operatorEntered);
+                //_displayScreen = calc.UpdateOperator(operatorEntered);
                 //calcV2.UpdateOperator(operatorEntered);
+                //onPropertyChanged(nameof(DisplayNumber));
+                //_displayCalculation = calc.GetCalculation();
+                //onPropertyChanged(nameof(DisplayCalculation));
+                calcV2.UpdateOperator(operatorEntered);
+                _displayScreen = calcV2.GetCalculationResult();
                 onPropertyChanged(nameof(DisplayNumber));
-                _displayCalculation = calc.GetCalculation();
+                _displayCalculation = calcV2.GetEquation();
                 onPropertyChanged(nameof(DisplayCalculation));
             }
         }
@@ -65,16 +75,18 @@
 
         public void GetCalculationResult()
         {
-            _displayScreen = calc.GetResult();
+            _displayScreen = calcV2.GetCalculationResult();
             onPropertyChanged(nameof(DisplayNumber));
-            _displayCalculation = calc.GetCalculation();
+            _displayCalculation = calcV2.GetEquation();
+            _displayCalculation = _displayCalculation + "= " + _displayScreen;
             onPropertyChanged(nameof(DisplayCalculation));
-            calc.ClearAllData();
+            //calc.ClearAllData();
         }
 
         public void ClearAll()
         {
-            calc.ClearAllData();
+            //calc.ClearAllData();
+            calcV2.ClearAllData();
             UpdateNumber = "0";
         }
 
