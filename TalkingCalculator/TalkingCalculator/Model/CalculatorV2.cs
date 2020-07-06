@@ -144,7 +144,6 @@ namespace TalkingCalculator.Model
             inputList = calculatorHelper.EquationToListConverter(input);
             tempResult = calculatorHelper.GetEquationResult(inputList);
         }
-        
         public void ClearAllData()
         {
             numberString.Clear();
@@ -152,11 +151,26 @@ namespace TalkingCalculator.Model
             inputList.Clear();
             tempResult = 0;
         }
-        //public void ClearRightNumber()
-        //{
-        //    numberString.Clear();
-        //    rightNumber = double.NaN;
-        //    isDecimalValue = false;
-        //}
+        public void EquationCalculationCompleted()
+        {
+            inputList.Clear();
+            numberString.Clear();
+            inputList.Add(tempResult.ToString());
+            numberString.Append(tempResult.ToString());
+        }
+        public void UpdateEquation()
+        {
+            if (numberString.Length > 0)
+            {
+                int lastIndex = numberString.Length - 1;
+                string tempLastValue = numberString[lastIndex].ToString();
+
+                if (calculatorHelper.isOperator(tempLastValue))
+                {
+                    numberString.Append(tempResult);
+                    UpdateTheResults(numberString.ToString());
+                }
+            }
+        }
     }
 }

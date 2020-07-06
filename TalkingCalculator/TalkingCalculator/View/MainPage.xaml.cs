@@ -21,8 +21,6 @@
             _displayLabel = this.FindByName<Label>("DisplayWindow");
             mainViewModel = BindingContext as MainPageViewModel;
             mainViewModel.ClearAll();
-            //CalculatorV2 v2 = new CalculatorV2();
-            //v2.Test();
         }
 
         private void ButtonNumber_Clicked(object sender, EventArgs e)
@@ -50,10 +48,6 @@
 
         private void ButtonOperator_Clicked(object sender, EventArgs e)
         {
-            // Get second number
-            // Clear the display
-            // show new number
-
             Button operationClicked = (sender as Button);
             mainViewModel.UpdateOperator = operationClicked.Text;
         }
