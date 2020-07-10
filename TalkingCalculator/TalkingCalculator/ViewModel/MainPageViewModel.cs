@@ -2,13 +2,14 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Globalization;
     using System.Linq;
     using TalkingCalculator.Model;
     using Xamarin.Essentials;
+    using Xamarin.Forms;
 
     public class MainPageViewModel : INotifyPropertyChanged
     {
-        Calculator calc = new Calculator();
         CalculatorV2 calcV2 = new CalculatorV2();
         TextToSpeechCalc tts = new TextToSpeechCalc();
         string number = string.Empty;
@@ -30,11 +31,11 @@
             set
             {
                 number = value;
+
                 calcV2.UpdateNumber(number);
-                _displayCalculation = calcV2.GetEquation();
-                onPropertyChanged(nameof(DisplayCalculation));
-                _displayScreen = number;
-                onPropertyChanged(nameof(DisplayNumber));
+
+                UpdateEquationDisplay(calcV2.GetEquation());
+                UpdateResultDisplay(calcV2.GetLastInput());
             }
         }
 
@@ -47,10 +48,9 @@
                 operatorEntered = value;
 
                 calcV2.UpdateOperator(operatorEntered);
-                _displayScreen = calcV2.GetCalculationResult();
-                onPropertyChanged(nameof(DisplayNumber));
-                _displayCalculation = calcV2.GetEquation();
-                onPropertyChanged(nameof(DisplayCalculation));
+
+                UpdateEquationDisplay(calcV2.GetEquation());
+                UpdateResultDisplay(calcV2.GetCalculationResult());
             }
         }
 
@@ -66,11 +66,12 @@
         public void GetCalculationResult()
         {
             calcV2.UpdateEquation();
-            _displayScreen = calcV2.GetCalculationResult();
-            onPropertyChanged(nameof(DisplayNumber));
-            _displayCalculation = calcV2.GetEquation();
-            _displayCalculation = _displayCalculation + "= " + _displayScreen;
-            onPropertyChanged(nameof(DisplayCalculation));
+
+            string tempResult = calcV2.GetCalculationResult();
+
+            UpdateEquationDisplay(calcV2.GetEquation() + "= " + tempResult);
+            UpdateResultDisplay(tempResult);
+
             calcV2.EquationCalculationCompleted();
         }
 
@@ -88,16 +89,29 @@
             }
         }
 
+
+        // Input 1.01 + 1.
+        // When . is pressed on second number result is calculated
+        // it should only show current input
         public void AddDecimalPoint()
         {
-            if (!calc.isDecimalValue)
+            if (!calcV2.isDecimalValue)
             {
-                calc.isDecimalValue = true;
-                _displayScreen = calc.GetNumber();
-                onPropertyChanged(nameof(DisplayNumber));
-                _displayCalculation = calc.GetCalculation();
-                onPropertyChanged(nameof(DisplayCalculation));
+                calcV2.isDecimalValue = true;
+
+                UpdateEquationDisplay(calcV2.GetEquation());
+                UpdateResultDisplay(calcV2.GetLastInput());
             }
+        }
+        private void UpdateEquationDisplay(string display)
+        {
+            _displayCalculation = display;
+            onPropertyChanged(nameof(DisplayCalculation));
+        }
+        private void UpdateResultDisplay(string display)
+        {
+            _displayScreen = display;
+            onPropertyChanged(nameof(DisplayNumber));
         }
     }
 }

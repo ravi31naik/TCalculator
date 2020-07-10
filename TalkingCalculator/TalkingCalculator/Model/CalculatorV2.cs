@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -58,34 +59,41 @@ namespace TalkingCalculator.Model
         }
         public string GetEquation()
         {
-
-            StringBuilder tempOutput = new StringBuilder();
-            if(numberString.Length < 1)
+            //StringBuilder tempOutput = new StringBuilder();
+            if (numberString.Length < 1)
             {
                 return "0";
             }
 
-            var outputArray = inputList.ToArray();
-            foreach (var item in outputArray)
-            {
-                if (calculatorHelper.isNumber(item))
-                {
-                    double temp = double.NaN;
-                    double.TryParse(item, out temp);
-                    tempOutput.Append(ConvertDigitToString(temp));
-                }
-                else if (calculatorHelper.isOperator(item))
-                {
-                    tempOutput.Append(item);
-                }
-                else
-                {
-                    return ErrorResult;
-                }
-                tempOutput.Append(" ");
-            }
+            // try to add space between number and operation
 
-            return tempOutput.ToString();
+            return numberString.ToString();
+            //if (numberString.ToString().Equals("0."))
+            //{
+            //    return numberString.ToString();
+            //}
+
+            //var outputArray = inputList.ToArray();
+            //foreach (var item in outputArray)
+            //{
+            //    if (calculatorHelper.isNumber(item))
+            //    {
+            //        double temp = double.NaN;
+            //        double.TryParse(item, out temp);
+            //        tempOutput.Append(ConvertDigitToString(temp));
+            //    }
+            //    else if (calculatorHelper.isOperator(item))
+            //    {
+            //        tempOutput.Append(item);
+            //    }
+            //    else
+            //    {
+            //        return ErrorResult;
+            //    }
+            //    tempOutput.Append(" ");
+            //}
+
+            //return tempOutput.ToString();
         }
         public void UpdateNumber(string number)
         {
@@ -132,7 +140,11 @@ namespace TalkingCalculator.Model
                 //Calculate results
                 UpdateTheResults(numberString.ToString());
             }
-            
+            if (isDecimalValue)
+            {
+                isDecimalValue = false;
+            }
+
         }
         public string GetCalculationResult()
         {
@@ -171,6 +183,28 @@ namespace TalkingCalculator.Model
                     UpdateTheResults(numberString.ToString());
                 }
             }
+        }
+        public string GetLastInput()
+        {
+
+            int tempLastIndex = inputList.Count - 1;
+            while (tempLastIndex >= 0 && calculatorHelper.isOperator(inputList[tempLastIndex]))
+            {
+                tempLastIndex -= 1;
+            }
+            if (tempLastIndex < 0)
+            {
+                return "0";
+            }
+            else
+            {
+                return inputList[tempLastIndex].ToString();
+            }
+            //if (inputList.Count > 0)
+            //{
+            //    return inputList[inputList.Count - 1].ToString();
+            //}
+            //return "0";
         }
     }
 }
