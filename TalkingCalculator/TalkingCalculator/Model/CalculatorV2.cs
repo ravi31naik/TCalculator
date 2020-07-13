@@ -26,7 +26,9 @@ namespace TalkingCalculator.Model
                 _isDecimalValue = value;
                 if (_isDecimalValue)
                 {
-                    if (!(numberString.Length == 0))
+                    int tempLastIndex = numberString.Length - 1;
+                    string inputString = numberString.ToString();
+                    if (numberString.Length != 0 && calculatorHelper.isNumber(inputString[tempLastIndex].ToString()))
                     {
                         numberString.Append(".");
                     }
@@ -59,41 +61,27 @@ namespace TalkingCalculator.Model
         }
         public string GetEquation()
         {
-            //StringBuilder tempOutput = new StringBuilder();
             if (numberString.Length < 1)
             {
                 return "0";
             }
-
-            // try to add space between number and operation
-
-            return numberString.ToString();
-            //if (numberString.ToString().Equals("0."))
-            //{
-            //    return numberString.ToString();
-            //}
-
-            //var outputArray = inputList.ToArray();
-            //foreach (var item in outputArray)
-            //{
-            //    if (calculatorHelper.isNumber(item))
-            //    {
-            //        double temp = double.NaN;
-            //        double.TryParse(item, out temp);
-            //        tempOutput.Append(ConvertDigitToString(temp));
-            //    }
-            //    else if (calculatorHelper.isOperator(item))
-            //    {
-            //        tempOutput.Append(item);
-            //    }
-            //    else
-            //    {
-            //        return ErrorResult;
-            //    }
-            //    tempOutput.Append(" ");
-            //}
-
-            //return tempOutput.ToString();
+            else
+            {
+                StringBuilder tempOutput = new StringBuilder();
+                var outputArray = numberString.ToString().ToArray();
+                for(int i = 0; i < outputArray.Length; i++)
+                {
+                    if (calculatorHelper.isNumber(outputArray[i].ToString()))
+                    {
+                        tempOutput.Append(outputArray[i].ToString());
+                        continue;
+                    }
+                    tempOutput.Append(" ");
+                    tempOutput.Append(outputArray[i].ToString());
+                    tempOutput.Append(" ");
+                }
+                return tempOutput.ToString();
+            }
         }
         public void UpdateNumber(string number)
         {
@@ -130,6 +118,12 @@ namespace TalkingCalculator.Model
                 {
                     //Update the last operator
                     numberString.Remove(lastIndex, 1);
+                    numberString.Append(oper);
+                }
+                else if (tempLastValue.Equals("."))
+                {
+                    // Update input where only number and a decimal point (0.) is provided
+                    numberString.Append(0);
                     numberString.Append(oper);
                 }
                 else
@@ -170,6 +164,8 @@ namespace TalkingCalculator.Model
             inputList.Add(tempResult.ToString());
             numberString.Append(tempResult.ToString());
         }
+
+        /// <summary>Adds right side of equation when required.</summary>
         public void UpdateEquation()
         {
             if (numberString.Length > 0)
@@ -182,9 +178,14 @@ namespace TalkingCalculator.Model
                     numberString.Append(tempResult);
                     UpdateTheResults(numberString.ToString());
                 }
+                // Update input where only number and a decimal point (0.) is provided
+                if (tempLastValue.Equals("."))
+                {
+                    numberString.Append(0);
+                }
             }
         }
-        public string GetLastInput()
+        public string GetLastNumberInput()
         {
 
             int tempLastIndex = inputList.Count - 1;

@@ -35,7 +35,7 @@
                 calcV2.UpdateNumber(number);
 
                 UpdateEquationDisplay(calcV2.GetEquation());
-                UpdateResultDisplay(calcV2.GetLastInput());
+                UpdateResultDisplay(calcV2.GetLastNumberInput());
             }
         }
 
@@ -63,13 +63,15 @@
             tts.localePicked = localeSelected;
         }
 
+        /// <summary>
+        /// Perform all operations provided in the input
+        /// </summary>
         public void GetCalculationResult()
         {
             calcV2.UpdateEquation();
 
             string tempResult = calcV2.GetCalculationResult();
-
-            UpdateEquationDisplay(calcV2.GetEquation() + "= " + tempResult);
+            UpdateEquationDisplay(calcV2.GetEquation() + " = " + tempResult);
             UpdateResultDisplay(tempResult);
 
             calcV2.EquationCalculationCompleted();
@@ -89,10 +91,6 @@
             }
         }
 
-
-        // Input 1.01 + 1.
-        // When . is pressed on second number result is calculated
-        // it should only show current input
         public void AddDecimalPoint()
         {
             if (!calcV2.isDecimalValue)
@@ -100,7 +98,7 @@
                 calcV2.isDecimalValue = true;
 
                 UpdateEquationDisplay(calcV2.GetEquation());
-                UpdateResultDisplay(calcV2.GetLastInput());
+                UpdateResultDisplay(calcV2.GetLastNumberInput());
             }
         }
         private void UpdateEquationDisplay(string display)
