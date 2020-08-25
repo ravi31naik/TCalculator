@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -68,6 +69,7 @@ namespace TalkingCalculator.Model
             else
             {
                 StringBuilder tempOutput = new StringBuilder();
+                //string resultOutput = string.Empty;
                 var outputArray = numberString.ToString().ToArray();
                 for(int i = 0; i < outputArray.Length; i++)
                 {
@@ -76,6 +78,7 @@ namespace TalkingCalculator.Model
                         tempOutput.Append(outputArray[i].ToString());
                         continue;
                     }
+                    //resultOutput = ConvertExponentialToDigits(tempOutput.ToString());
                     tempOutput.Append(" ");
                     tempOutput.Append(outputArray[i].ToString());
                     tempOutput.Append(" ");
@@ -161,8 +164,11 @@ namespace TalkingCalculator.Model
         {
             inputList.Clear();
             numberString.Clear();
-            inputList.Add(tempResult.ToString());
-            numberString.Append(tempResult.ToString());
+            //inputList.Add(tempResult.ToString());
+            //numberString.Append(tempResult.ToString());
+
+            inputList.Add(ConvertExponentialToDigits(tempResult.ToString()));
+            numberString.Append(ConvertExponentialToDigits(tempResult.ToString()));
         }
 
         /// <summary>Adds right side of equation when required.</summary>
@@ -199,13 +205,18 @@ namespace TalkingCalculator.Model
             }
             else
             {
+                //return ConvertStringToNumber(inputList[tempLastIndex].ToString());
                 return inputList[tempLastIndex].ToString();
             }
-            //if (inputList.Count > 0)
-            //{
-            //    return inputList[inputList.Count - 1].ToString();
-            //}
-            //return "0";
+        }
+
+        private string ConvertExponentialToDigits(string inputNumber)
+        {
+            return double.Parse(inputNumber, CultureInfo.InvariantCulture).ToString("F");
+        }
+        private string ConvertStringToNumber(string inputNumber)
+        {
+            return double.Parse(inputNumber, CultureInfo.InvariantCulture).ToString("N0");
         }
     }
 }

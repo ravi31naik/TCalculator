@@ -162,6 +162,7 @@ namespace TalkingCalculator.Model
 
         private double performCalculation(double leftNumber, double rightNumber, string operation)
         {
+            // when multiplying two number it converts to Exponential format 
             switch (operation)
             {
                 case "+":
