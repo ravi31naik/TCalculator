@@ -1,13 +1,17 @@
 ﻿namespace TalkingCalculator
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Globalization;
     using System.Linq;
+    using TalkingCalculator.Model;
     using Xamarin.Essentials;
+    using Xamarin.Forms;
 
     public class MainPageViewModel : INotifyPropertyChanged
     {
-        Calculator calc = new Calculator();
+        CalculatorV2 calcV2 = new CalculatorV2();
         TextToSpeechCalc tts = new TextToSpeechCalc();
         string number = string.Empty;
         string operatorEntered = string.Empty;
@@ -28,11 +32,11 @@
             set
             {
                 number = value;
-                calc.UpdateNumber(number);
-                _displayScreen = calc.GetNumber();
-                onPropertyChanged(nameof(DisplayNumber));
-                _displayCalculation = calc.GetCalculation();
-                onPropertyChanged(nameof(DisplayCalculation));
+
+                calcV2.UpdateNumber(number);
+
+                UpdateEquationDisplay(calcV2.GetEquation());
+                UpdateResultDisplay(calcV2.GetLastNumberInput());
             }
         }
 
@@ -43,10 +47,11 @@
             set
             {
                 operatorEntered = value;
-                _displayScreen = calc.UpdateOperator(operatorEntered);
-                onPropertyChanged(nameof(DisplayNumber));
-                _displayCalculation = calc.GetCalculation();
-                onPropertyChanged(nameof(DisplayCalculation));
+
+                calcV2.UpdateOperator(operatorEntered);
+
+                UpdateEquationDisplay(calcV2.GetEquation());
+                UpdateResultDisplay(calcV2.GetCalculationResult());
             }
         }
 
@@ -59,18 +64,23 @@
             tts.localePicked = localeSelected;
         }
 
+        /// <summary>
+        /// Perform all operations provided in the input
+        /// </summary>
         public void GetCalculationResult()
         {
-            _displayScreen = calc.GetResult();
-            onPropertyChanged(nameof(DisplayNumber));
-            _displayCalculation = calc.GetCalculation();
-            onPropertyChanged(nameof(DisplayCalculation));
-            calc.ClearAllData();
+            calcV2.UpdateEquation();
+
+            string tempResult = calcV2.GetCalculationResult();
+            UpdateEquationDisplay(calcV2.GetEquation() + " = " + tempResult);
+            UpdateResultDisplay(tempResult);
+
+            calcV2.EquationCalculationCompleted();
         }
 
         public void ClearAll()
         {
-            calc.ClearAllData();
+            calcV2.ClearAllData();
             UpdateNumber = "0";
         }
 
@@ -84,14 +94,23 @@
 
         public void AddDecimalPoint()
         {
-            if (!calc.isDecimalValue)
+            if (!calcV2.isDecimalValue)
             {
-                calc.isDecimalValue = true;
-                _displayScreen = calc.GetNumber();
-                onPropertyChanged(nameof(DisplayNumber));
-                _displayCalculation = calc.GetCalculation();
-                onPropertyChanged(nameof(DisplayCalculation));
+                calcV2.isDecimalValue = true;
+
+                UpdateEquationDisplay(calcV2.GetEquation());
+                UpdateResultDisplay(calcV2.GetLastNumberInput());
             }
+        }
+        private void UpdateEquationDisplay(string display)
+        {
+            _displayCalculation = display;
+            onPropertyChanged(nameof(DisplayCalculation));
+        }
+        private void UpdateResultDisplay(string display)
+        {
+            _displayScreen = display;
+            onPropertyChanged(nameof(DisplayNumber));
         }
     }
 }

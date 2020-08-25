@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
+    using TalkingCalculator.Model;
     using Xamarin.Essentials;
     using Xamarin.Forms;
 
@@ -47,10 +48,6 @@
 
         private void ButtonOperator_Clicked(object sender, EventArgs e)
         {
-            // Get second number
-            // Clear the display
-            // show new number
-
             Button operationClicked = (sender as Button);
             mainViewModel.UpdateOperator = operationClicked.Text;
         }
