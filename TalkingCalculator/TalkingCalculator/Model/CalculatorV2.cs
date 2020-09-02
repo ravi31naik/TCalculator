@@ -14,6 +14,7 @@ namespace TalkingCalculator.Model
         private StringBuilder numberString = new StringBuilder();
         private double tempResult = double.NaN;
         private bool _isDecimalValue;
+        private bool _isResultDecimal;
         CalculatorHelper calculatorHelper = new CalculatorHelper();
         List<string> inputList = new List<string>();
 
@@ -37,14 +38,20 @@ namespace TalkingCalculator.Model
                     {
                         numberString.Append("0.");
                     }
+                    isResultDecimal = true;
                 }
             }
+        }
+        public bool isResultDecimal
+        {
+            get { return _isResultDecimal; }
+            set { _isResultDecimal = value; }
         }
         public string ConvertDigitToString(double number)
         {
             if (number < 1000000000000000)
             {
-                if (isDecimalValue)
+                if (isResultDecimal)
                 {
                     //return string.Format("{0:N}", number);
                     return number.ToString();
@@ -52,7 +59,7 @@ namespace TalkingCalculator.Model
                 else
                 {
                     //return string.Format("{0:N0}", number);
-                    return number.ToString();
+                    return number.ToString("#,#", CultureInfo.InvariantCulture);
                 }
             }
             else
@@ -159,6 +166,7 @@ namespace TalkingCalculator.Model
             isDecimalValue = false;
             inputList.Clear();
             tempResult = 0;
+            isResultDecimal = false;
         }
         public void EquationCalculationCompleted()
         {
@@ -205,18 +213,31 @@ namespace TalkingCalculator.Model
             }
             else
             {
-                //return ConvertStringToNumber(inputList[tempLastIndex].ToString());
-                return inputList[tempLastIndex].ToString();
+                if (isResultDecimal)
+                {
+                    return inputList[tempLastIndex].ToString();
+                }
+                else
+                {
+                    return ConvertDigitToString(ConvertStringToNumber(inputList[tempLastIndex]));
+                }
             }
         }
 
         private string ConvertExponentialToDigits(string inputNumber)
         {
-            return double.Parse(inputNumber, CultureInfo.InvariantCulture).ToString("F");
+            if (isResultDecimal)
+            {
+                return double.Parse(inputNumber, CultureInfo.InvariantCulture).ToString("F10");
+            }
+            else
+            {
+                return double.Parse(inputNumber, CultureInfo.InvariantCulture).ToString("F0");
+            }
         }
-        private string ConvertStringToNumber(string inputNumber)
+        private double ConvertStringToNumber(string inputNumber)
         {
-            return double.Parse(inputNumber, CultureInfo.InvariantCulture).ToString("N0");
+            return double.Parse(inputNumber);
         }
     }
 }
