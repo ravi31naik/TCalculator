@@ -213,8 +213,14 @@ namespace TalkingCalculator.Model
             }
             else
             {
-                //return ConvertStringToNumber(inputList[tempLastIndex].ToString());
-                return inputList[tempLastIndex].ToString();
+                if (isResultDecimal)
+                {
+                    return inputList[tempLastIndex].ToString();
+                }
+                else
+                {
+                    return ConvertDigitToString(ConvertStringToNumber(inputList[tempLastIndex]));
+                }
             }
         }
 
@@ -229,9 +235,9 @@ namespace TalkingCalculator.Model
                 return double.Parse(inputNumber, CultureInfo.InvariantCulture).ToString("F0");
             }
         }
-        private string ConvertStringToNumber(string inputNumber)
+        private double ConvertStringToNumber(string inputNumber)
         {
-            return double.Parse(inputNumber, CultureInfo.InvariantCulture).ToString("N0");
+            return double.Parse(inputNumber);
         }
     }
 }
